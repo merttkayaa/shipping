@@ -15,7 +15,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/ship")
 @RequiredArgsConstructor
-//@Api(value = "Ship API", description = "Product related operations")
 public class ShipController {
     private final ShipService shipService;
 

@@ -29,6 +29,15 @@ public class ShippingServiceImpl implements ShippingService {
     private final RouteDBService routeDBService;
     private final ShippingMapper shippingMapper;
 
+//    public ShippingServiceImpl(ShippingDBService shippingDBService, ProductDBService productDBService, ShipDBService shipDBService, RouteDBService routeDBService, ShippingMapper shippingMapper, ObjectMapper objectMapper) {
+//        this.shippingDBService = shippingDBService;
+//        this.productDBService = productDBService;
+//        this.shipDBService = shipDBService;
+//        this.routeDBService = routeDBService;
+//        this.shippingMapper = shippingMapper;
+//        this.objectMapper = new ObjectMapper();
+//    }
+
     @Override
     public OnBoardDto onBoard(OnBoardCreate onBoardCreate) {
         List<String> unMatchedWithShipList = new ArrayList<>();
