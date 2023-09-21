@@ -1,3 +1,8 @@
+CREATE SCHEMA product;
+CREATE SCHEMA route;
+CREATE SCHEMA ship;
+CREATE SCHEMA shipping;
+
 create table product.product
 (
     id               bigint generated always as identity (minvalue 1 maxvalue 999999)

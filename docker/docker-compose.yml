@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  app:
+  shipping-app:
     build:
       context: ../.
       dockerfile: Dockerfile
@@ -11,18 +11,20 @@ services:
       - redis
       - postgresqldb
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/shipping_app
-      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/shipping_app
+      - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
-
+    networks:
+      - general
 
   redis:
     image: redis:latest
-    container_name: redis_serve
+    container_name: redis_server
     ports:
       - "6379:6379"
-
+    networks:
+      - general
 
   postgresqldb:
     image: 'postgres:13.1-alpine'
@@ -31,7 +33,11 @@ services:
       - 5432:5432
     environment:
       POSTGRES_DB: shipping_app
-      POSTGRES_USER: admin
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    networks:
+      - general
 
-
+networks:
+  general:
+    driver: bridge
