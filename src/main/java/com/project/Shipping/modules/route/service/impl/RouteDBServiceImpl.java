@@ -19,12 +19,15 @@ import com.project.Shipping.modules.route.service.RouteDBService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -91,10 +94,19 @@ public class RouteDBServiceImpl implements RouteDBService {
         return routeMapper.entityToDurationDto(durationRepository.save(entity));
     }
 
+
     @Override
     public DurationDto getDuration(LocationType currentLocation, LocationType targetLocation) {
         Optional<Duration> optionalEntity = Optional.ofNullable(durationRepository.findByCurrentLocationAndTargetLocation(currentLocation, targetLocation).orElseThrow(() ->
                 new RecordNotFound("route not found")));
         return routeMapper.entityToDurationDto(optionalEntity.get());
     }
+
+    @Cacheable(value = "duration")
+    @Override
+    public List<DurationDto> getAllDurations() {
+        return durationRepository.findAll().stream().map(routeMapper::entityToDurationDto).collect(Collectors.toList());
+    }
+
+
 }

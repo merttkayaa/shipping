@@ -3,6 +3,7 @@ package com.project.Shipping.modules.shipping.service.impl;
 import com.project.Shipping.modules.product.model.dto.ProductDto;
 import com.project.Shipping.modules.product.model.enums.LocationType;
 import com.project.Shipping.modules.product.service.ProductDBService;
+import com.project.Shipping.modules.route.model.DurationDto;
 import com.project.Shipping.modules.route.model.RouteDto;
 import com.project.Shipping.modules.route.service.RouteDBService;
 import com.project.Shipping.modules.ship.model.ShipDto;
@@ -90,13 +91,22 @@ public class ShippingServiceImpl implements ShippingService {
             } else {
                 nextEntry = iterator.next();
                 String locationName = currentEntry.getValue().name() + ":" + nextEntry.getValue().name();
-                Double durationTime = routeDBService.getDuration(currentEntry.getValue(), nextEntry.getValue()).getDurationTime();
+//                Double durationTime = routeDBService.getDuration(currentEntry.getValue(), nextEntry.getValue()).getDurationTime();
+                Double durationTime = calculateDurationWithCache(currentEntry.getValue(), nextEntry.getValue());
                 durationMap.put(locationName, durationTime);
                 totalDuration = totalDuration + durationTime;
                 currentEntry = nextEntry;
             }
         }
         return shippingMapper.ToDestinationDurationDto(currentLocation, durationMap, totalDuration);
+    }
+
+    private Double calculateDurationWithCache(LocationType currentLocation, LocationType targetLocation) {
+        return routeDBService.getAllDurations().stream()
+                .filter(item -> item.getCurrentLocation().equals(currentLocation) && item.getTargetLocation().equals(targetLocation))
+                .map(DurationDto::getDurationTime)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

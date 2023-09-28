@@ -9,6 +9,8 @@ import com.project.Shipping.modules.route.model.request.UpdateRoute;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface RouteDBService {
     RouteDto create(CreateRoute createRoute);
 
@@ -25,4 +27,6 @@ public interface RouteDBService {
     DurationDto createDuration(DurationDto durationDto);
 
     DurationDto getDuration(LocationType currentLocation, LocationType targetLocation);
+
+    List<DurationDto> getAllDurations();
 }
