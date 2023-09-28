@@ -10,6 +10,8 @@ services:
     depends_on:
       - redis
       - postgresqldb
+      - grafana
+      - prometheus
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/shipping_app
       - SPRING_DATASOURCE_USERNAME=postgres
