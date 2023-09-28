@@ -22,6 +22,8 @@ The Shipping application is a flexible Spring Boot-based solution that streamlin
 
 - **Documentation**: The application's API documentation is generated using OpenAPI and Swagger, making it easy for developers to understand and interact with the API.
 
+- **Data Modelling**: The application includes data model consisting of five tables that interact seamlessly to support the shipping business flow.
+
 - **Data Storage**: JSON data types are used for storing data in the PostgreSQL database, enabling efficient and structured data storage.
 
 - **Scenario Management**: During the analysis phase, scenarios were documented in Confluence, and tasks were tracked and managed using Jira.
