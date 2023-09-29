@@ -17,6 +17,7 @@ import com.project.Shipping.modules.shipping.model.request.OnBoardCreate;
 import com.project.Shipping.modules.shipping.service.ShippingDBService;
 import com.project.Shipping.modules.shipping.service.ShippingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -29,6 +30,7 @@ public class ShippingServiceImpl implements ShippingService {
     private final ShipDBService shipDBService;
     private final RouteDBService routeDBService;
     private final ShippingMapper shippingMapper;
+    private final RabbitTemplate rabbitTemplate;
 
 //    public ShippingServiceImpl(ShippingDBService shippingDBService, ProductDBService productDBService, ShipDBService shipDBService, RouteDBService routeDBService, ShippingMapper shippingMapper, ObjectMapper objectMapper) {
 //        this.shippingDBService = shippingDBService;
@@ -63,6 +65,8 @@ public class ShippingServiceImpl implements ShippingService {
         productDBService.onBoardProduct(shipDto.getShipName(), onBoardedList);
         shipDBService.updateCurrentStorage(shipDto, onBoardedList);
         shippingDBService.saveOnBoard(shippingMapper.createToEntity(onBoardCreate, unMatchedWithShipList, capacityOverloadedList));
+
+        rabbitTemplate.convertAndSend(onBoardCreate.getProductIdList());
 
         return shippingMapper.prepareDto(unMatchedWithShipList, capacityOverloadedList, onBoardedList, shipDto);
     }
